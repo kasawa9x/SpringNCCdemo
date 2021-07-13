@@ -67,7 +67,7 @@ public class AdminController {
             model.addAttribute("category", category.get());
             return "categoriesAdd";
         }else {
-            return "404";
+            return "error";
         }
     }//form edit category, fill old data into form
 

@@ -67,7 +67,7 @@
                     <span class="nav-link"sec:authorize="hasAuthority('User')" th:text="${cartCount}">0</span>
                 </li>
                 <th:block sec:authorize="isAuthenticated()">
-                    <a class="nav-link" th:href="@{/user}" th:utext=" ${#request.userPrincipal.name}">..</a>
+                    <a class="nav-link"  th:utext=" ${#request.userPrincipal.name}">..</a>
 
                 </th:block>
             </ul>
