@@ -10,5 +10,6 @@ public interface BillService {
     public void updateBill(Bill bill);
     public void removeBillById(int id);
     public Optional<Bill> getBillById(int id);
+    public List<Bill> findBillByUserId (int userId);
 
 }

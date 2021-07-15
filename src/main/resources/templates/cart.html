@@ -85,14 +85,14 @@
                     <div class="card wish-list mb-4">
                         <div class="card-body">
 
-                            <h5 class="mb-4">Cart (<span th:text="${cartCount}">2</span> items)</h5>
+                            <h5 class="mb-4">Cart (<span th:text="${cartCount}"></span> items)</h5>
 
                             <div class="row mb-4" th:each="item, iStat : ${cart}">
                                 <div class="col-md-5 col-lg-3 col-xl-3">
                                     <div class="mb-3 mb-md-0">
                                         <img class="img-fluid w-100"
                                              th:src="@{${'/productImages/' + item.imageName}}"
-                                             src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/12a.jpg" alt="Sample">
+                                             >
 
                                     </div>
                                 </div>
@@ -100,8 +100,8 @@
                                     <div>
                                         <div class="d-flex justify-content-between">
                                             <div>
-                                                <h5 th:text="${item.name}">Blue denim shirt</h5>
-                                                <p class="mb-3 text-uppercase small">Weight: <span th:text="${item.weight}"></span> grams</p>
+                                                <h5 th:text="${item.name}"></h5>
+                                                <p class="mb-3 text-uppercase small"><span th:text="${item.weight}"></span> grams</p>
 <!--                                                <p class="mb-2 text-uppercase small">Category: <span th:text="${item.category.name}"></span></p>-->
 
                                             </div>

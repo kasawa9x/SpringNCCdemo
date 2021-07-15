@@ -18,4 +18,7 @@ public class Bill {
     private String email;
     private String note;
     private long price;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    User user;
 }

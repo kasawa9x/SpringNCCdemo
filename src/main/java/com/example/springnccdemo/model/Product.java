@@ -24,5 +24,8 @@ public class Product {
     private String description;
 
     private String imageName;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "billdetail_id", referencedColumnName = "billdetail_id")
+//    private BillDetail billDetail;
 
 }//create table mapping trong db

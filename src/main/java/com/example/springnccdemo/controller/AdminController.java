@@ -4,6 +4,7 @@ package com.example.springnccdemo.controller;
 import com.example.springnccdemo.dto.ProductDTO;
 import com.example.springnccdemo.model.Category;
 import com.example.springnccdemo.model.Product;
+import com.example.springnccdemo.service.BillService;
 import com.example.springnccdemo.service.CategoryService;
 import com.example.springnccdemo.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,8 @@ public class AdminController {
 
     @Autowired
     ProductService productService;
+    @Autowired
+    BillService billService;
 
 
 
@@ -41,6 +44,11 @@ public class AdminController {
         model.addAttribute("categories", categoryService.getAllCategory());
         return "categories";
     }//view all categories
+    @GetMapping("/admin/history")
+    public String getOrder(Model model){
+        model.addAttribute("bills", billService.getAllBill());
+        return "history";
+    }//view all order
 
     @GetMapping("/admin/categories/add")
     public String getCatAdd(Model model){

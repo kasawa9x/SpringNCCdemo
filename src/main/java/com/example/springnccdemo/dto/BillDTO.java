@@ -12,5 +12,6 @@ public class BillDTO {
     private String email;
     private String note;
     private long price;
+    private String userName;
 }
 

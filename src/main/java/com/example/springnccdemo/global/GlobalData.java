@@ -2,6 +2,7 @@ package com.example.springnccdemo.global;
 
 
 
+import com.example.springnccdemo.model.Bill;
 import com.example.springnccdemo.model.Product;
 
 import java.util.ArrayList;

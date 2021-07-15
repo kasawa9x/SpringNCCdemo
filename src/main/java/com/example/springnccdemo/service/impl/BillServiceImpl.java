@@ -33,5 +33,10 @@ public class BillServiceImpl implements BillService {
         return billRepository.findById(id);
     }
 
+    @Override
+    public List<Bill> findBillByUserId(int user_id) {
+        return billRepository.findBillByUserId(user_id);
+    }
+
 
 }
