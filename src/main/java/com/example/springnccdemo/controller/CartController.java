@@ -1,72 +1,126 @@
 package com.example.springnccdemo.controller;
 
 import com.example.springnccdemo.dto.BillDTO;
-import com.example.springnccdemo.global.GlobalData;
 import com.example.springnccdemo.model.*;
 import com.example.springnccdemo.repository.UserRepository;
+import com.example.springnccdemo.service.BillDetailService;
 import com.example.springnccdemo.service.BillService;
+
 import com.example.springnccdemo.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 public class CartController {
     @Autowired
-    ProductService productService;
-    @Autowired
     BillService billService;
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    BillDetailService billDetailService;
+
+    public List<CartItem> cartItems = new ArrayList<>();
+
+    private final ProductService productService;
+
+    @Autowired
+    public CartController(ProductService productService) {
+        this.productService = productService;
+    }
 
     @GetMapping("/cart")
-    public String cartGet(Model model){
-        model.addAttribute("cartCount", GlobalData.cart.size());
-        model.addAttribute("total", GlobalData.cart.stream().mapToLong(Product::getPrice).sum());
-        model.addAttribute("cart", GlobalData.cart);
-
+    public String cart(Model model) {
+        long total = 0;
+        for (CartItem item : cartItems) {
+            total = (total + item.getQuantity() * item.getProduct().getPrice());
+        }
+        long total1 = 0;
+        for (CartItem item : cartItems) {
+            total1 = item.getQuantity() * item.getProduct().getPrice();
+        }
+        model.addAttribute("total1", cartItems.size());
+        model.addAttribute("total", total);
+        model.addAttribute("carts", cartItems);
+        model.addAttribute("cartCount", cartItems.size());
         return "cart";
-    }//page cart
+    }
 
-    @GetMapping("/addToCart/{id}")
-    public String addToCart(@PathVariable int id){
-        GlobalData.cart.add(productService.getProductById(id).get());
-        return "redirect:/shop";
-    }//click add from page viewProduct
 
-    @GetMapping("/cart/removeItem/{index}")
-    public String cartItemRemove(@PathVariable int index){
-        GlobalData.cart.remove(index);
+    @GetMapping("/cart/add-cart")
+    public String addToCart(@RequestParam int id, HttpServletRequest request) {
+        Product p = productService.getProductById(id).get();
+        addToCard (p);
+        HttpSession session = request.getSession();
+        System.out.println(cartItems.toString());
+        session.setAttribute("cart", cartItems);
         return "redirect:/cart";
-    } // delete 1 product
+    }
 
+    @GetMapping("/cart/delete-cart")
+    public String deleteCart(@RequestParam int id, HttpServletRequest request) {
+        Product p = productService.getProductById(id).get();
+        deleteFromCart(p);
+        HttpSession session = request.getSession();
+        System.out.println(cartItems.size());
+        session.setAttribute("cart", cartItems);
+        return "redirect:/cart";
+    }
+
+    @GetMapping("/cart/remove-cart")
+    public String removeCart(@RequestParam int id, HttpServletRequest request) {
+        Product p = productService.getProductById(id).get();
+        removeFromCart(p);
+        HttpSession session = request.getSession();
+        System.out.println(cartItems.size());
+        session.setAttribute("cart", cartItems);
+        return "redirect:/cart";
+    }
+
+    @GetMapping("/cart/set-cart")
+    public String setCart(@RequestParam(value = "id") int id, @RequestParam(value = "num") int num, HttpServletRequest request) {
+        Product p = productService.getProductById(id).get();
+        setCart(p, num);
+        HttpSession session = request.getSession();
+        System.out.println(cartItems.size());
+        session.setAttribute("cart", cartItems);
+        return "redirect:/";
+    }
     @GetMapping("/checkout")
     public String checkout(Model model){
-        model.addAttribute("cartCount", GlobalData.cart.size());
-        model.addAttribute("total", GlobalData.cart.stream().mapToLong(Product::getPrice).sum());
+        long total = 0;
+        for (CartItem item : cartItems) {
+            total = (total + item.getQuantity() * item.getProduct().getPrice());
+        }
+        model.addAttribute("total", total);
+        model.addAttribute("carts", cartItems);
+        model.addAttribute("cartCount", cartItems.size());
+//        model.addAttribute("cartCount", cartItems.size());
+//        long total = 0;
+//        for (CartItem item : cartItems) {
+//            total = (total + item.getQuantity() * item.getProduct().getPrice());
+//        }
+//        model.addAttribute("total", total);
         //model.addAttribute("cart", GlobalData.cart);
         model.addAttribute("billDTO", new BillDTO());
         return "checkout";
     } // checkout totalPrice
     @GetMapping("/order")
     public String billget(Model model,@ModelAttribute("billDTO") BillDTO billDTO){
-        model.addAttribute("bills",billService.getBillById(billDTO.getId()));
+//        model.addAttribute("bills",billService.getBillById(billDTO.getId()));
         return "order";
     }
 
     @PostMapping("/checkout")
-    public String billPost(Model model, @ModelAttribute("billDTO") BillDTO billDTO, Principal principal)  {
+    public String billPost(HttpServletRequest request,Model model, @ModelAttribute("billDTO") BillDTO billDTO,  Principal principal)  {
+
         Bill bill= new Bill();
         bill.setId(billDTO.getId());
         bill.setName(billDTO.getName());
@@ -75,17 +129,58 @@ public class CartController {
         bill.setPhone(billDTO.getPhone());
         bill.setEmail(billDTO.getEmail());
         bill.setNote(billDTO.getNote());
-        bill.setPrice(GlobalData.cart.stream().mapToLong(Product::getPrice).sum());
+        long total = 0;
+        for (CartItem item : cartItems) {
+            total = (total + item.getQuantity() * item.getProduct().getPrice());
+        }
+
+        bill.setPrice(total);
         bill.setUser(userRepository.findUserByEmail(principal.getName()).get());
 
 
         billService.updateBill(bill);
-        GlobalData.cart.clear();
-        model.addAttribute("order",GlobalData.order);
 
-    return "order";
+
+//        BillDetail billDetail = new BillDetail();
+//        billDetail.setId(billDetailDTO.getId());
+//        billDetail.setPrice();
+        ArrayList<CartItem> carts = (ArrayList<CartItem>) request.getSession().getAttribute("cart");
+        System.out.println(carts);
+        BillDetail billDetail =  null ;
+        Product product = null;
+        for (CartItem item:carts) {
+            product = productService.getProductById(item.getProduct().getId()).get();
+//            System.out.println(product.toString());
+            billDetail = new BillDetail();
+            billDetail.setQuantity(item.getQuantity());
+            billDetail.setPrice(item.getProduct().getPrice());
+            billDetail.setProduct(product);
+            billDetail.setBill(bill);
+
+            billDetailService.save(billDetail);
+//            System.out.println(billDetail.toString());
+        }
+//
+//        ArrayList<CartItem> carts = (ArrayList<CartItem>) request.getSession().getAttribute("cart");
+//        System.out.println(carts);
+//        BillDetail billDetail =  null ;
+//        Product product = null;
+//        for (CartItem item:carts) {
+//            product = productService.getProductById(item.getProduct().getId()).get();
+//            billDetail = new BillDetail();
+//            billDetailService.save(billDetail);
+//
+//        }
+
+
+
+
+        cartItems.clear();
+
+
+        return "order";
     }//after register success
-//    @PostMapping("/order")
+    //    @PostMapping("/order")
 //    public String billPost(Model model,@ModelAttribute("billDTO") BillDTO billDTO){
 //        model.addAttribute("bills",billService.getBillById(billDTO.getId()));
 //        return "order";
@@ -97,4 +192,58 @@ public class CartController {
         model.addAttribute("bills", billService.findBillByUserId(user_íd));
         return "history";
     }
+
+
+    public String setCart(Product p, int s) {
+        for (CartItem item : cartItems) {
+            if (item.getProduct().getId() == p.getId()) {
+                item.setQuantity(s);
+                return "cart";
+            }
+        }
+        CartItem cartItem = new CartItem();
+        cartItem.setQuantity(s);
+        cartItem.setProduct(p);
+        cartItems.add(cartItem);
+        return "cart";
+    }
+
+    public String addToCard(Product p) {
+        for (CartItem item : cartItems) {
+            if (item.getProduct().getId() == p.getId()) {
+                item.setQuantity(item.getQuantity() + 1);
+                return "cart";
+            }
+        }
+        CartItem cartItem = new CartItem();
+        cartItem.setQuantity(1);
+        cartItem.setProduct(p);
+        cartItems.add(cartItem);
+        return "cart";
+
+    }
+
+    public String deleteFromCart(Product p) {
+        for (CartItem item : cartItems) {
+            if (item.getProduct().getId() == p.getId() && item.getQuantity() > 1) {
+                item.setQuantity(item.getQuantity() - 1);
+                return "cart";
+            } else if (item.getProduct().getId() == p.getId() && item.getQuantity() == 0) {
+                cartItems.remove(item);
+                return "cart";
+            }
+        }
+        return "cart";
+    }
+
+    private String removeFromCart(Product p) {
+        for (CartItem item : cartItems) {
+            if (item.getProduct().getId() == p.getId()) {
+                cartItems.remove(item);
+                return "cart";
+            }
+        }
+        return "cart";
+    }
+
 }

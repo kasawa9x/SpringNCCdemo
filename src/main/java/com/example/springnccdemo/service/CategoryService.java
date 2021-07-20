@@ -12,12 +12,12 @@ import java.util.Optional;
 @Service
 public interface CategoryService {
 
-    public List<Category> getAllCategory();
+     List<Category> getAllCategory();
 
-    public void updateCategory(Category category);
+     void updateCategory(Category category);
 
-    public void removeCategoryById(int id);
+     void removeCategoryById(int id);
 
-    public Optional<Category> getCategoryById(int id);
+     Optional<Category> getCategoryById(int id);
 
 }

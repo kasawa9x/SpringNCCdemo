@@ -19,7 +19,7 @@ public class Product {
 
     private long price;
 
-    private double weight;
+    private int  quantity;
 
     private String description;
 

@@ -40,14 +40,14 @@ public class HomeController {
 //        } else {
 //            String username = principal.toString();
 //        }
-
-        model.addAttribute("cartCount", GlobalData.cart.size());
+//
+//        model.addAttribute("cartCount", );
         return "index";
     } //index
 
     @GetMapping("/shop")
     public String shop(Model model){
-        model.addAttribute("cartCount", GlobalData.cart.size());
+
         model.addAttribute("categories", categoryService.getAllCategory());
         model.addAttribute("products", productService.getAllProduct());
         return "shop";
@@ -55,7 +55,7 @@ public class HomeController {
 
     @GetMapping("/shop/category/{id}")
     public String shopByCat(@PathVariable int id, Model model){
-        model.addAttribute("cartCount", GlobalData.cart.size());
+
         model.addAttribute("categories", categoryService.getAllCategory());
         model.addAttribute("products", productService.getAllProductByCategoryId(id));
         return "shop";
@@ -63,7 +63,7 @@ public class HomeController {
 
     @GetMapping("/shop/viewproduct/{id}")
     public String viewProduct(@PathVariable long id, Model model){
-        model.addAttribute("cartCount", GlobalData.cart.size());
+
         model.addAttribute("product", productService.getProductById(id).get());
         return "viewProduct";
     } //view product Details

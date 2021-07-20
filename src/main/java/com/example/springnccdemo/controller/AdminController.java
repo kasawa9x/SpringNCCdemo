@@ -4,6 +4,7 @@ package com.example.springnccdemo.controller;
 import com.example.springnccdemo.dto.ProductDTO;
 import com.example.springnccdemo.model.Category;
 import com.example.springnccdemo.model.Product;
+import com.example.springnccdemo.service.BillDetailService;
 import com.example.springnccdemo.service.BillService;
 import com.example.springnccdemo.service.CategoryService;
 import com.example.springnccdemo.service.ProductService;
@@ -30,6 +31,8 @@ public class AdminController {
     ProductService productService;
     @Autowired
     BillService billService;
+    @Autowired
+    BillDetailService billDetailService;
 
 
 
@@ -103,7 +106,7 @@ public class AdminController {
         product.setName(productDTO.getName());
         product.setCategory(categoryService.getCategoryById(productDTO.getCategoryId()).get());
         product.setPrice(productDTO.getPrice());
-        product.setWeight(productDTO.getWeight());
+        product.setQuantity(productDTO.getQuantity());
         product.setDescription(productDTO.getDescription());
         String imageUUID;
         if(!fileProductImage.isEmpty()){
@@ -136,7 +139,7 @@ public class AdminController {
             productDTO.setName(product.getName());
             productDTO.setCategoryId(product.getCategory().getId());
             productDTO.setPrice(product.getPrice());
-            productDTO.setWeight(product.getWeight());
+            productDTO.setQuantity(product.getQuantity());
             productDTO.setDescription(product.getDescription());
             productDTO.setImageName(product.getImageName());
 
@@ -148,4 +151,10 @@ public class AdminController {
         }
 
     }//form edit product, fill old data into form
+    @GetMapping("/admin/billdetail/{id}")
+    public String billDetail(@PathVariable Integer id, Model model){
+
+        model.addAttribute("billdetail", billDetailService.findBillDetailByBillId(id));
+        return "billdetail";
+    } //view bill Details
 }

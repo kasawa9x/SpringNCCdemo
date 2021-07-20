@@ -80,7 +80,61 @@
 
     <!--Section: Block Content-->
     <section class="mt-5 mb-4">
+        <div class="row">
+            <div class="col-lg-12 p-5 bg-white rounded shadow-sm mb-5">
 
+                <!-- Shopping cart table -->
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col" class="border-0 bg-light">
+                                <div class="p-2 px-3 text-uppercase">SN</div>
+                            </th>
+                            <th scope="col" class="border-0 bg-light">
+                                <div class="p-2 px-3 text-uppercase">Product</div>
+                            </th>
+                            <th scope="col" class="border-0 bg-light">
+                                <div class="py-2 text-uppercase">Price</div>
+                            </th>
+                            <th scope="col" class="border-0 bg-light">
+                                <div class="py-2 text-uppercase">Quantity</div>
+                            </th>
+
+                        </tr>
+                        </thead>
+                        <tbody th:each="cart, iStat : ${carts}">
+                        <tr>
+                            <th scope="row" th:text="${iStat.index + 1}">1</th>
+                            <td scope="row">
+                                <div class="p-2" >
+                                    <img class="img-fluid w-50"  alt="" width="30"
+                                         th:src="@{${'/productImages/' + cart.getProduct().getImageName()}}"
+                                    >
+                                    <!--                      <img th:src="*{cart.getProduct().getImage()}" alt="" width="70" class="img-fluid rounded shadow-sm">-->
+                                    <div class="ml-3 d-inline-block align-middle">
+                                        <h5 class="mb-0"> <a href="#" class="text-dark d-inline-block" th:text="*{cart.getProduct().getName()}">
+                                        </a></h5><span class="text-muted font-weight-normal font-italic"></span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="align-middle"><strong th:text="${#numbers.formatDecimal(cart.getProduct().getPrice()*cart.getQuantity(),3,'COMMA',0,'POINT' )}+ ' VNĐ'">
+                            </strong></td>
+                            <td class="align-middle">
+<!--                                <a th:href="@{'cart/delete-cart?id=' + ${cart.getProduct().getId()}}"><button class="btnSub">-</button></a>-->
+                                <strong th:text="${cart.getQuantity()}"><!--<%=c.getQuantity()%>--></strong>
+<!--                                <a th:href="@{'cart/add-cart?id=' + ${cart.getProduct().getId()}}"><button class="btnAdd">+</button></a>-->
+                            </td>
+
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <!-- End -->
+
+            </div>
+        </div>
         <!--Grid row-->
         <div class="row">
             <form th:action="@{/checkout}" method="post" th:object="${billDTO}" enctype="multipart/form-data">
@@ -178,15 +232,14 @@
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
                                 Amount Payable
-                                <span><span th:text="${total}"></span> VNĐ</span>
+                                <span><span th:text="${#numbers.formatDecimal(total,3,'COMMA',0,'POINT' )} + ' VNĐ' "></span></span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                                 Shipping
-                                <span>VNPOST : 30000 VNĐ</span>
+                                <span>VNPOST : 30,000 VNĐ</span>
                             </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
-
-                                <span><strong><span required th:field="*{price}" th:text="${total} + 30000"></span> VNĐ</strong></span>
+                            <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Total Payment</strong>
+                                <h5 class="font-weight-bold" th:text="${#numbers.formatDecimal(total+30000,3,'COMMA',0,'POINT' )} + ' VNĐ' "> </h5>
                             </li>
                         </ul>
 

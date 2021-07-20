@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BillService {
-    public List<Bill> getAllBill();
-    public void updateBill(Bill bill);
-    public void removeBillById(int id);
-    public Optional<Bill> getBillById(int id);
-    public List<Bill> findBillByUserId (int userId);
+     List<Bill> getAllBill();
+     void updateBill(Bill bill);
+     void removeBillById(int id);
+     Optional<Bill> getBillById(int id);
+     List<Bill> findBillByUserId (int userId);
 
 }

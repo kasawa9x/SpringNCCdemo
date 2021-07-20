@@ -13,7 +13,7 @@ public class ProductDTO {
 
     private long price;
 
-    private double weight;
+    private int  quantity;
 
     private String description;
 

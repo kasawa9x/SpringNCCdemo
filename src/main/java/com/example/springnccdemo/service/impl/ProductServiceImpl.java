@@ -31,7 +31,13 @@ public class ProductServiceImpl implements ProductService {
     public Optional<Product> getProductById(long id){
         return productRepository.findById(id);
     }//search theo id
+//    public Product findProductById(long id){
+//        return productRepository.getById(id);
+//    }
 
     public List<Product> getAllProductByCategoryId(int id){ return productRepository.findAllByCategory_Id(id); }
+
+
+
     //findList theo ProductDTO.categoryId
 }
