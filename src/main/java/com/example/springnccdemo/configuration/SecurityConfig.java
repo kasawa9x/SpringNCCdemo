@@ -25,7 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //permit all url
         http.authorizeRequests().antMatchers("/", "/shop/**", "/register", "/login").permitAll();
         http.authorizeRequests().antMatchers("/admin").hasAnyAuthority("Admin").and().formLogin().loginPage("/login").defaultSuccessUrl("/admin");
-//        http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/error");
+        http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/404");
 //                .antMatchers("/admin/**").hasRole("admin")
 //                .anyRequest()
 //                .authenticated()

@@ -67,6 +67,7 @@
             <th scope="col">SN</th>
             <th scope="col">Product Name</th>
             <th scope="col">Category</th>
+            <th scope="col">Quantity</th>
             <th scope="col">Preview</th>
             <th scope="col">Delete</th>
             <th scope="col">Update</th>
@@ -78,6 +79,7 @@
             <th scope="row" th:text="${iStat.index + 1}">1</th>
             <td th:text="${product.name}">Larry</td>
             <td th:text="${product.category.name}">Larry</td>
+            <td th:text="${product.quantity}">Larry</td>
             <td><img src="" height="100px" width="100px"  th:src="@{${'/productImages/' + product.imageName}}"></td>
 
             <td><a href="" th:href="@{/admin/products/delete/{id}(id=${product.id})}" class="btn btn-danger">Delete</a></td>
@@ -88,9 +90,9 @@
     </table>
 </div>
 
-<footer >
-    <div>©2021 Apple Store</div>
-</footer>
+<!--<footer >-->
+<!--    <div>©2021 Apple Store</div>-->
+<!--</footer>-->
 
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>

@@ -127,7 +127,7 @@ public class CartController {
         bill.setAddr(billDTO.getAddr());
         bill.setCity(billDTO.getCity());
         bill.setPhone(billDTO.getPhone());
-        bill.setEmail(billDTO.getEmail());
+
         bill.setNote(billDTO.getNote());
         long total = 0;
         for (CartItem item : cartItems) {

@@ -87,7 +87,7 @@
                   <td th:text="${bill.addr}"></td>
                   <td th:text="${bill.city}"></td>
                   <td th:text="${bill.phone}"></td>
-                  <td th:text="${bill.email}"></td>
+                  <td th:href="@{/user}" th:utext=" ${#request.userPrincipal.name}"></td>
                   <td th:text="${bill.note}"></td>
                   <td th:text="${#numbers.formatDecimal(bill.price+30000,3,'COMMA',0,'POINT' )} + ' VNĐ' "></td>
 

@@ -15,7 +15,7 @@ public class Bill {
     private String addr;
     private String city;
     private String phone;
-    private String email;
+
     private String note;
     private long price;
     @ManyToOne(fetch = FetchType.LAZY)

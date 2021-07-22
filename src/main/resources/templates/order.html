@@ -60,13 +60,13 @@
         <li class="nav-item active">
           <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/logout}" href="#">logout</a>
         </li>
-        <li class="nav-item active">
-          <a class="nav-link" sec:authorize="hasAuthority('User')" th:href="@{/cart}" href="#">cart</a>
-        </li>
+<!--        <li class="nav-item active">-->
+<!--          <a class="nav-link" sec:authorize="hasAuthority('User')" th:href="@{/cart}" href="#">cart</a>-->
+<!--        </li>-->
 
-        <li class="nav-item active">
-          <span class="nav-link"sec:authorize="hasAuthority('User')" th:text="${cartCount}">0</span>
-        </li>
+<!--        <li class="nav-item active">-->
+<!--          <span class="nav-link"sec:authorize="hasAuthority('User')" th:text="${cartCount}">0</span>-->
+<!--        </li>-->
         <th:block sec:authorize="isAuthenticated()">
           <a class="nav-link" th:href="@{/user}" th:utext=" ${#request.userPrincipal.name}">..</a>
 
@@ -84,7 +84,7 @@
 <!--    </th:block>-->
 
   </div>
-  <a th:href="@{/shop}" style="margin: 20px 0" class="btn btn-primary">Continue Shopping</a>
+  <a th:href="@{/sendMail}" style="margin: 20px 0" class="btn btn-primary">Continue Shopping</a>
 
 <!--  <table class="table">-->
 <!--    <thead class="thead-light">-->
