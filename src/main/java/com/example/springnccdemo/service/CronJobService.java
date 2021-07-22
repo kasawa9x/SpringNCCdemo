@@ -1,26 +1,31 @@
-package com.example.springnccdemo.controller;
+package com.example.springnccdemo.service;
 
 import com.example.springnccdemo.configuration.MyConstants;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-@Controller
-public class SimpleEmailExampleController {
+@Service
+public class CronJobService {
 
+    public static final String MY_EMAIL = "son.nguyenhong.ncc@gmail.com";
+
+    // Replace password!!
+    public static final String MY_PASSWORD = "Anhyeuem_99";
+
+    // And receiver!
+//    public static final String FRIEND_EMAIL = "sonbuitung@gmail.com";
+    public static final String FRIEND_EMAIL = "hongsonaaa@gmail.com";
     @Autowired
     private JavaMailSender emailSender;
-
-    @ResponseBody
-    @RequestMapping("/sendHtmlEmail")
-    public String sendHtmlEmail() throws MessagingException {
+    @Scheduled(fixedDelay = 1 * 1000 * 60)
+//    @Scheduled(cron = "*/1 * * * * ?")
+    public void CronJobService() throws MessagingException {
         System.out.println("sendHtmlEmail");
 
         MimeMessage message = emailSender.createMimeMessage();
@@ -29,7 +34,7 @@ public class SimpleEmailExampleController {
 
         MimeMessageHelper helper = new MimeMessageHelper(message, multipart, "utf-8");
 
-        String htmlMsg = "img src='https://www.brainybeaver.com/wp-content/uploads/2017/06/apple-store-logo.jpg'";
+        String htmlMsg = "<img src='https://www.brainybeaver.com/wp-content/uploads/2017/06/apple-store-logo.jpg>'";
 
         message.setContent(htmlMsg, "text/html");
 
@@ -43,8 +48,6 @@ public class SimpleEmailExampleController {
 
         this.emailSender.send(message);
 
-        return "Email Sent!";
+
     }
 }
-
-
