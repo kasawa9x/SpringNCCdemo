@@ -1,6 +1,8 @@
 package com.example.springnccdemo.service.impl;
 
 
+import com.example.springnccdemo.dto.ProductDTO;
+import com.example.springnccdemo.dto.ProductMapper;
 import com.example.springnccdemo.model.Product;
 import com.example.springnccdemo.repository.ProductRepository;
 import com.example.springnccdemo.service.ProductService;
@@ -15,10 +17,18 @@ import java.util.Optional;
 public class ProductServiceImpl implements ProductService {
     @Autowired
     ProductRepository productRepository;
+    @Autowired
+    ProductMapper productMapper;
 
     public List<Product> getAllProduct() {
         return productRepository.findAll();
     }//findAll
+
+    @Override
+    public List<ProductDTO> getAllProductDTO() {
+        List<ProductDTO> dtos = productMapper.productsToProductDTOS(productRepository.findAll());
+        return dtos;
+    }
 
     public void updateProduct(Product product){
         productRepository.save(product);

@@ -2,6 +2,7 @@ package com.example.springnccdemo.controller;
 
 
 import com.example.springnccdemo.dto.ProductDTO;
+import com.example.springnccdemo.dto.ProductMapper;
 import com.example.springnccdemo.model.Category;
 import com.example.springnccdemo.model.Product;
 import com.example.springnccdemo.service.BillDetailService;
@@ -33,7 +34,8 @@ public class AdminController {
     BillService billService;
     @Autowired
     BillDetailService billDetailService;
-
+    @Autowired
+    ProductMapper productMapper;
 
 
     @GetMapping("/admin")
@@ -49,7 +51,7 @@ public class AdminController {
     }//view all categories
     @GetMapping("/admin/history")
     public String getOrder(Model model){
-        model.addAttribute("bills", billService.getAllBill());
+        model.addAttribute("bills", billService.getAllBillDTO());
         return "history";
     }//view all order
 
@@ -85,7 +87,8 @@ public class AdminController {
     //Products session
     @GetMapping("/admin/products")
     public String getPro(Model model){
-        model.addAttribute("products", productService.getAllProduct());
+        model.addAttribute("productDTOS", productService.getAllProductDTO());
+//        model.addAttribute("categories", categoryService.ge());
         return "products";
     }//view all products
 
@@ -100,14 +103,17 @@ public class AdminController {
     public String postProAdd(@ModelAttribute("productDTO") ProductDTO productDTO,
                              @RequestParam("productImage") MultipartFile fileProductImage,
                              @RequestParam("imgName") String imgName) throws IOException {
+        Product product = productMapper.productDTOToProduct(productDTO);
+
+
         //convert dto > entity
-        Product product = new Product();
-        product.setId(productDTO.getId());
-        product.setName(productDTO.getName());
-        product.setCategory(categoryService.getCategoryById(productDTO.getCategoryId()).get());
-        product.setPrice(productDTO.getPrice());
-        product.setQuantity(productDTO.getQuantity());
-        product.setDescription(productDTO.getDescription());
+//        Product product = new Product();
+//        product.setId(productDTO.getId());
+//        product.setName(productDTO.getName());
+//        product.setCategory(categoryService.getCategoryById(productDTO.getCategoryId()).get());
+//        product.setPrice(productDTO.getPrice());
+//        product.setQuantity(productDTO.getQuantity());
+//        product.setDescription(productDTO.getDescription());
         String imageUUID;
         if(!fileProductImage.isEmpty()){
             imageUUID = fileProductImage.getOriginalFilename();
@@ -117,6 +123,8 @@ public class AdminController {
             imageUUID = imgName;
         }//save image
         product.setImageName(imageUUID);
+//
+//        productService.updateProduct(product);
 
         productService.updateProduct(product);
         return "redirect:/admin/products";
@@ -134,14 +142,16 @@ public class AdminController {
         if (opProduct.isPresent()){
             Product product = opProduct.get();
             //convert entity > dto
-            ProductDTO productDTO = new ProductDTO();
-            productDTO.setId(product.getId());
-            productDTO.setName(product.getName());
-            productDTO.setCategoryId(product.getCategory().getId());
-            productDTO.setPrice(product.getPrice());
-            productDTO.setQuantity(product.getQuantity());
-            productDTO.setDescription(product.getDescription());
-            productDTO.setImageName(product.getImageName());
+            ProductDTO productDTO = productMapper.productToProductDTO(product);
+
+//            ProductDTO productDTO = new ProductDTO();
+//            productDTO.setId(product.getId());
+//            productDTO.setName(product.getName());
+//            productDTO.setCategoryId(product.getCategory().getId());
+//            productDTO.setPrice(product.getPrice());
+//            productDTO.setQuantity(product.getQuantity());
+//            productDTO.setDescription(product.getDescription());
+//            productDTO.setImageName(product.getImageName());
 
             model.addAttribute("productDTO", productDTO);
             model.addAttribute("categories", categoryService.getAllCategory());
@@ -157,4 +167,10 @@ public class AdminController {
         model.addAttribute("billdetail", billDetailService.findBillDetailByBillId(id));
         return "billdetail";
     } //view bill Details
+//    @GetMapping("/sendemo")
+//    public String senDemo(@PathVariable Integer id, Model model){
+//
+//
+//        return "billdetail";
+//    } //view bill Details
 }

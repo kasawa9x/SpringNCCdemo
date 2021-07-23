@@ -1,6 +1,7 @@
 package com.example.springnccdemo.controller;
 
 import com.example.springnccdemo.dto.BillDTO;
+import com.example.springnccdemo.dto.BillMapper;
 import com.example.springnccdemo.model.*;
 import com.example.springnccdemo.repository.UserRepository;
 import com.example.springnccdemo.service.BillDetailService;
@@ -26,6 +27,8 @@ public class CartController {
     UserRepository userRepository;
     @Autowired
     BillDetailService billDetailService;
+    @Autowired
+    BillMapper billMapper;
 
     public List<CartItem> cartItems = new ArrayList<>();
 
@@ -121,14 +124,16 @@ public class CartController {
     @PostMapping("/checkout")
     public String billPost(HttpServletRequest request,Model model, @ModelAttribute("billDTO") BillDTO billDTO,  Principal principal)  {
 
-        Bill bill= new Bill();
-        bill.setId(billDTO.getId());
-        bill.setName(billDTO.getName());
-        bill.setAddr(billDTO.getAddr());
-        bill.setCity(billDTO.getCity());
-        bill.setPhone(billDTO.getPhone());
+//        Bill bill= new Bill();
+//        bill.setId(billDTO.getId());
+//        bill.setName(billDTO.getName());
+//        bill.setAddr(billDTO.getAddr());
+//        bill.setCity(billDTO.getCity());
+//        bill.setPhone(billDTO.getPhone());
+//
+//        bill.setNote(billDTO.getNote());
+        Bill bill= billMapper.billDTOToBill(billDTO);
 
-        bill.setNote(billDTO.getNote());
         long total = 0;
         for (CartItem item : cartItems) {
             total = (total + item.getQuantity() * item.getProduct().getPrice());

@@ -4,6 +4,7 @@ import com.example.springnccdemo.configuration.MyConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,7 @@ public class CronJobService {
     private JavaMailSender emailSender;
     @Scheduled(fixedDelay = 1 * 1000 * 60)
 //    @Scheduled(cron = "*/1 * * * * ?")
+//    @Async
     public void CronJobService() throws MessagingException {
         System.out.println("sendHtmlEmail");
 
