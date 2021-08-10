@@ -20,7 +20,7 @@ public class Product {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", referencedColumnName = "category_id")
-    @NotEmpty
+//    @NotEmpty
     private Category category;
 
     private long price;

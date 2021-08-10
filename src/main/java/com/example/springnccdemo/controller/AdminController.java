@@ -110,7 +110,7 @@ public class AdminController {
 //        Product product = new Product();
 //        product.setId(productDTO.getId());
 //        product.setName(productDTO.getName());
-//        product.setCategory(categoryService.getCategoryById(productDTO.getCategoryId()).get());
+//        product.setCategory(categoryService.getCategoryById(productDTO.getCategory().getId()).get());
 //        product.setPrice(productDTO.getPrice());
 //        product.setQuantity(productDTO.getQuantity());
 //        product.setDescription(productDTO.getDescription());

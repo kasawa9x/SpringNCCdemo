@@ -16,7 +16,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-
+    @Autowired
+    GoogleOAuth2SuccessHandler googleOAuth2SuccessHandler;
     @Autowired
     CustomUserDetailService customUserDetailService;
 
@@ -24,20 +25,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         //permit all url
         http.authorizeRequests().antMatchers("/", "/shop/**", "/register", "/login").permitAll();
-        http.authorizeRequests().antMatchers("/admin").hasAnyAuthority("Admin").and().formLogin().loginPage("/login").defaultSuccessUrl("/admin");
+        http.authorizeRequests().antMatchers("/admin/**").hasAnyAuthority("Admin").and().formLogin().loginPage("/login").defaultSuccessUrl("/admin");
         http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/404");
 //                .antMatchers("/admin/**").hasRole("admin")
 //                .anyRequest()
 //                .authenticated()
 //
-//                //google authen
-//                .and()
-//                .oauth2Login()
-//                .loginPage("/login")
-//                .successHandler(googleOAuth2SuccessHandler)
+        //google authen
+        http
+                .oauth2Login()
+                .loginPage("/login")
+                .successHandler(googleOAuth2SuccessHandler);
 
                 //check login
-
         http
             .formLogin()
             .loginPage("/login")
